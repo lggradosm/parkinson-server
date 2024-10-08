@@ -1,0 +1,12 @@
+services: 
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: parkinson_server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app 
+    environment:
+      - ENVIRONMENT=production
