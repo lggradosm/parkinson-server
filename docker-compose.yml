@@ -11,3 +11,25 @@ services:
       - ./app:/app 
     environment:
       - ENVIRONMENT=production
+    networks:
+      - app_network
+
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: parkinson_db
+      TZ: "America/Lima"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app_network
+volumes:
+  postgres_data:
+networks:
+  app_network:
+    driver: bridge
