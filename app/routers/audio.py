@@ -33,8 +33,7 @@ async def drive_list():
 @router.post("/upload/audio")
 async def upload_audio(file: UploadFile = File(...),  paciente: str = Form(...), db: Session = Depends(get_db)):
   try:
-    now = datetime.now()
-    (wav_io, file_name, audio,file_name) = convert_to_wav(file.file.read(),file.filename.rsplit('.', 1)[0], now)
+    (wav_io, file_name, audio,file_name) = convert_to_wav(file.file.read(),file.filename.rsplit('.', 1)[0])
     upload_file_to_drive(wav_io, file_name)
     audio_path = Path("uploaded_files/test.wav")
     save_audio_tmp(audio, audio_path)
@@ -44,13 +43,13 @@ async def upload_audio(file: UploadFile = File(...),  paciente: str = Form(...),
       "genero": paciente_json.get("genero"),
       "edad": paciente_json.get("edad"),
       "estado": 1,
-      "file_name":file_name,
-      "created_at": now
+      "file_name":file_name
     }
     paciente_request = PacienteRequest(**paciente_data)
     response = create_paciente(paciente_request, db)
     if response:
       return JSONResponse(content={"message":"Guardado exitosamente"}, status_code=201)
+    print(response)
     return JSONResponse(content={"message":"Error"}, status_code=500)
     
     # print("uploading")

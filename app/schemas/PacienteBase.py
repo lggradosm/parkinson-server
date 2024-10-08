@@ -7,7 +7,6 @@ class PacienteBase(BaseModel):
   edad: int
   estado: int
   file_name:str
-  created_at:datetime 
   class Config: 
     orm_mode = True
   

@@ -5,14 +5,14 @@ from pathlib import Path
 import os
 
 
-def convert_to_wav(file: bytes,filename, now: datetime):
+def convert_to_wav(file: bytes,filename):
     try:
       audio_data = BytesIO(file)
       audio = AudioSegment.from_file(audio_data, format="m4a")
       wav_io = BytesIO()
       audio.export(wav_io, format="wav")
       wav_io.seek(0)
-      
+      now = datetime.now()
       timestamp = now.strftime("%d-%m-%y-%H:%M:%S")
       file_name = f"{filename+"_"+timestamp}.wav"
       return wav_io, file_name, audio, file_name

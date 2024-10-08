@@ -10,4 +10,3 @@ class Paciente(Base):
   edad = Column(Integer)
   estado = Column(Integer)
   file_name = Column(String)
-  created_at = Column(DateTime)

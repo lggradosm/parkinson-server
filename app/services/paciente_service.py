@@ -15,4 +15,5 @@ def create_paciente(paciente:PacienteRequest, db: Session ):
     return True
   except SQLAlchemyError as e:
     db.rollback()
+    print(e)
     return False
