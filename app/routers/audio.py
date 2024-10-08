@@ -24,11 +24,6 @@ from datetime import datetime
 router = APIRouter()
 
 
-@router.get("/drive")
-async def drive_list():
-  return JSONResponse(content=list_files(), status_code=200)
-
-
 # REQUIERE "ffmpeg" para convertir de m4a a wav
 @router.post("/upload/audio")
 async def upload_audio(file: UploadFile = File(...),  paciente: str = Form(...), db: Session = Depends(get_db)):
