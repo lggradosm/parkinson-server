@@ -44,7 +44,6 @@ async def upload_audio(file: UploadFile = File(...),  paciente: str = Form(...),
     response = create_paciente(paciente_request, db)
     if response:
       return JSONResponse(content={"message":"Guardado exitosamente"}, status_code=201)
-    print(response)
     return JSONResponse(content={"message":"Error"}, status_code=500)
     
     # print("uploading")
