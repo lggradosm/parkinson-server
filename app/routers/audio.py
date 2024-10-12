@@ -15,7 +15,7 @@ import tempfile
 import os
 from io import BytesIO
 from schemas.PacienteBase import PacienteRequest
-from services.paciente_service import create_paciente
+from services.paciente_service import create_paciente, get_all_pacientes, get_total_pacientes
 import json
 from config.database import get_db
 from sqlalchemy.orm import Session
@@ -74,26 +74,15 @@ async def upload_audio(file: UploadFile = File(...),  paciente: str = Form(...),
       return JSONResponse(content={"message": str(e)}, status_code=500)
 
 
-@router.get("/test")
-def test():
-  return JSONResponse(content={"message":"test"},status_code=200)
+@router.get("/bd")
+def get_pacientes (db: Session = Depends(get_db)):
+  data = get_all_pacientes(db)
+  return JSONResponse(content={"data": data}, status_code=500)
 
-@router.get("/start")
-def start():
-  try:
-    # Ruta de archivo
-    file_path = Path("uploaded_files/recording.wav")
-    # Comprobando si existe el archivo
-    if not file_path.exists():
-      return JSONResponse(content={"message": "El archivo de audio no existe."}, status_code=400)
-    # Obtener el cambio de amplitud del audio (y), medida de aplitudes por segundo de audio (sr).
-    y, sr = librosa.load(file_path)
-    # Aplicar reducción de ruido
-    reduced_noise =  noise_reducer(y=y, sr=sr, prop_decrease=0.2)
-
-  except Exception as e:
-    # Manejar errores y retornar un mensaje de error al cliente
-    return JSONResponse(content={"message": f"Error: {str(e)}"}, status_code=500)
+@router.get("/bd/total")
+def get_pacientes (db: Session = Depends(get_db)):
+  data = get_total_pacientes(db)
+  return JSONResponse(content={"total": data}, status_code=500)
 
 
 def noise_reducer(y,sr,prop_decrease):
