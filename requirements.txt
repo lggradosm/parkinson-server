@@ -110,3 +110,5 @@ websockets==13.0.1
 wheel==0.44.0
 sqlalchemy
 psycopg2-binary
+webrtcvad
+bcrypt
