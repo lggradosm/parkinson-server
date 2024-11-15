@@ -1,16 +1,11 @@
-from pathlib import Path
-from pydub import AudioSegment
 import numpy as np
-from io import BytesIO
 from parselmouth.praat import call
 import parselmouth
 import pandas as pd
 import joblib
 import re
 from scipy.signal import butter, lfilter
-import librosa
-import webrtcvad
-import wave
+
 
 def detect_parkinson (audio_path):
     try:
