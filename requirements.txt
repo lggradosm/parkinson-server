@@ -111,3 +111,4 @@ wheel==0.44.0
 sqlalchemy
 psycopg2-binary
 bcrypt
+xgboost

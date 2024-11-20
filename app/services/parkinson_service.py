@@ -1,16 +1,20 @@
 import numpy as np
 from parselmouth.praat import call
+from schemas.PruebaBase import PruebaBase
+from schemas.ResponseBase import ResponseBase
+from services.prueba_service import create_prueba
 import parselmouth
 import pandas as pd
 import joblib
 import re
 from scipy.signal import butter, lfilter
+from sqlalchemy.orm import Session
 
 
-def detect_parkinson (audio_path):
+async def detect_parkinson (audio_path, usuario_id , db: Session):
     try:
         # Procesar archivo de audio
-        print(audio_path)
+        print("usuario_id" + str(usuario_id))
         sound = parselmouth.Sound(str(audio_path))
         f0min, f0max, startTime, endTime = 75, 300, 0, 0
         unit = "Hertz"
@@ -38,9 +42,14 @@ def detect_parkinson (audio_path):
             scaled_new_data = pd.DataFrame(scaler.transform(dataframe), columns=dataframe.columns)
             # Predicción
             prediction = model.predict(scaled_new_data)
-            return "Positivo" if prediction[0] == 1 else "Negativo"
+            prueba = PruebaBase(resultado=prediction[0], usuario_id=usuario_id)
+            result = await create_prueba(prueba, db)
+            if result.status == 200:
+                return "Positivo" if prediction[0] == 1 else "Negativo"
+            else: 
+                return "Error"
         else:
-            return "Sin voz"
+            return "No se detecto voz"
     except Exception as e:
         print(f"Error en `detect_parkinson`: {e}")
         return False
